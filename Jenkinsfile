@@ -50,9 +50,9 @@ pipeline {
 
         stage('Stop and Remove Container') {
             steps {
-                // Detener y eliminar el contenedor
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm -f ${CONTAINER_NAME} || true"
+                // Detener y eliminar el contenedor (comentado para que el contenedor no se detenga)
+                // sh "docker stop ${CONTAINER_NAME} || true"
+                // sh "docker rm -f ${CONTAINER_NAME} || true"
             }
         }
     }
@@ -66,3 +66,4 @@ pipeline {
         }
     }
 }
+
