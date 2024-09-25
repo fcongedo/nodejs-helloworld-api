@@ -10,14 +10,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 // Construir la imagen de Docker
-                sh "docker build -t ${IMAGE_NAME} ."
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
             }
         }
 
         stage('Run Docker Container') {
             steps {
                 // Ejecutar el contenedor
-                sh "docker run -d -p 3000:3000 --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+                sh "docker stop ${env.CONTAINER_NAME} || true"
+                sh "docker rm -f ${env.CONTAINER_NAME} || true"
+                sh "docker run -d -p 3000:3000 --name ${env.CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
 
@@ -48,13 +50,13 @@ pipeline {
             }
         }
 
-        stage('Stop and Remove Container') {
-            steps {
-                // Detener y eliminar el contenedor
-                sh "docker stop ${CONTAINER_NAME} || true"
-                sh "docker rm -f ${CONTAINER_NAME} || true"
-            }
-        }
+      //  stage('Stop and Remove Container') {
+      //     steps {
+      //         // Detener y eliminar el contenedor
+      //          sh "docker stop ${CONTAINER_NAME} || true"
+      //         sh "docker rm -f ${CONTAINER_NAME} || true"
+      //      }
+      //  }
     }
 
     post {
